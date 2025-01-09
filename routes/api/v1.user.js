@@ -5,7 +5,7 @@ module.exports = function ({ UserController }) {
     router.get('/:id', UserController.getOne);
 
     router.post('/', UserController.create);
-    router.post('/createUser', UserController.createUser);
+    router.post('/create-user', UserController.createUser);
 
     router.put('/:id', UserController.update);
     router.patch('/:id/role', UserController.updateRole);
