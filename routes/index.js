@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const { ErrorMiddleware } = require("../middleware");
+const api = require("./api");
 // const swaggerUI = require("swagger-ui-express");
 //const authMiddleware = require("../middlewares/auth.middleware");
 // const { SWAGGER_PATH } = require("../config");
@@ -10,12 +11,18 @@ const { ErrorMiddleware } = require("../middleware");
 
 module.exports = function ({
   ExampleRoutes,
+  PermissionRoutes,
+  UserRoutes,
+  PermissionTypeRoutes
 }) {
   const router = express.Router();
   const apiRouter = express.Router();
 
   apiRouter.use(express.json()).use(cors()).use(morgan("dev")).use(express.urlencoded({ extended: true }));
   apiRouter.use("/example", ExampleRoutes);
+  apiRouter.use("/permission", PermissionRoutes);
+  apiRouter.use("/user", UserRoutes);
+  apiRouter.use("/permissiontype", PermissionTypeRoutes)
 
   router.use("/v1/api", apiRouter);
   router.use("/", (req, res) => {
