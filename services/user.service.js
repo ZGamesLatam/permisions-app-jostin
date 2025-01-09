@@ -26,12 +26,16 @@ module.exports = class UserService extends BaseService {
     });
 
     updateUserRole = catchServiceAsync(async (userId, newRole) => {
-        const user = await _user.findById(userId);
-        if (!user) {
+        const updatedUser = await _user.findOneAndUpdate(
+            { _id: userId },
+            { role: newRole },
+            { new: true }
+        );
+
+        if (!updatedUser) {
             throw new AppError("Usuario no encontrado", 404);
         }
-        user.role = newRole;
-        await user.save();
-        return { data: user }
+
+        return { data: updatedUser };
     });
 };

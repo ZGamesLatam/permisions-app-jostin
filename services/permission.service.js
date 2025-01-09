@@ -28,30 +28,37 @@ module.exports = class PermissionService extends BaseService {
     });
 
     approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
-        const permission = await _permission.findById(permissionId);
-        if (!permission) {
+        const updatedPermission = await _permission.findOneAndUpdate(
+            { _id: permissionId },
+            {
+                status: "Aprobado",
+                approvedBy: userAdminId,
+            },
+            { new: true }
+        );
+
+        if (!updatedPermission) {
             throw new AppError("Permiso no encontrado", 404);
         }
 
-        permission.status = "Aprobado";
-        permission.approvedBy = userAdminId;
-        await permission.save();
-
-        return { data: permission };
+        return { data: updatedPermission };
     });
 
     rejectPermission = catchServiceAsync(async (permissionId, userAdminId, reason) => {
-        const permission = await _permission.findById(permissionId);
-        if (!permission) {
+        const updatedPermission = await _permission.findOneAndUpdate(
+            { _id: permissionId },
+            {
+                status: "Rechazado",
+                approvedBy: userAdminId,
+                reasonForRejection: reason,
+            },
+            { new: true }
+        );
+
+        if (!updatedPermission) {
             throw new AppError("Permiso no encontrado", 404);
         }
 
-        permission.status = "Rechazado";
-        permission.approvedBy = userAdminId;
-        permission.reasonForRejection = reason;
-        await permission.save();
-
-        return { data: permission };
-
+        return { data: updatedPermission };
     });
 };

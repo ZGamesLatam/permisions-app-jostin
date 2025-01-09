@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const AuthUtils = require("../utils/auth"); // Importar AuthUtils
+
 
 const UserSchema = new Schema(
     {
