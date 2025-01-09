@@ -27,51 +27,6 @@ module.exports = class PermissionService extends BaseService {
         return { data: newPermission };
     });
 
-    // approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
-    //     const filter = { _id: permissionId };
-    //     const update = {
-    //         status: "Aprobado",
-    //         approvedBy: userAdminId,
-    //     };
-
-    //     // Usamos findOneAndUpdate para realizar la operación atómica
-    //     const updatedPermission = await _permission.findOneAndUpdate(filter, update, {
-    //         new: true, // Devuelve el documento actualizado
-    //     });
-
-    //     if (!updatedPermission) {
-    //         throw new AppError("Permiso no encontrado", 404);
-    //     }
-
-    //     return appResponse(updatedPermission);
-    // });
-
-    // rejectPermission = catchServiceAsync(async (permissionId, userAdminId, reason) => {
-    //     const filter = { _id: permissionId };
-    //     const update = {
-    //         status: "Rechazado",
-    //         approvedBy: userAdminId,
-    //         reasonForRejection: reason,
-    //     };
-
-    //     // Usamos findOneAndUpdate para realizar la operación atómica
-    //     const updatedPermission = await _permission.findOneAndUpdate(filter, update, {
-    //         new: true, // Devuelve el documento actualizado
-    //     });
-
-    //     if (!updatedPermission) {
-    //         throw new AppError("Permiso no encontrado", 404);
-    //     }
-
-    //     return appResponse(updatedPermission);
-    // });
-
-
-
-
-
-
-
     approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
         const permission = await _permission.findById(permissionId);
         if (!permission) {
