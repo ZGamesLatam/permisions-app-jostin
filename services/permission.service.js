@@ -17,19 +17,61 @@ module.exports = class PermissionService extends BaseService {
     createWithType = catchServiceAsync(async (permissionData) => {
         const { permissionTypeId } = permissionData;
 
-        // 1) Validar que el tipo de permiso existe
         const typeExists = await _permissionType.findById(permissionTypeId);
         if (!typeExists) {
             throw new AppError("Tipo de permiso no encontrado", 404);
         }
 
-        // 2) Crear el nuevo permiso
         const newPermission = await _permission.create(permissionData);
 
-        return newPermission;
+        return { data: newPermission };
     });
 
-    // Por ejemplo, aprobación o rechazo:
+    // approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
+    //     const filter = { _id: permissionId };
+    //     const update = {
+    //         status: "Aprobado",
+    //         approvedBy: userAdminId,
+    //     };
+
+    //     // Usamos findOneAndUpdate para realizar la operación atómica
+    //     const updatedPermission = await _permission.findOneAndUpdate(filter, update, {
+    //         new: true, // Devuelve el documento actualizado
+    //     });
+
+    //     if (!updatedPermission) {
+    //         throw new AppError("Permiso no encontrado", 404);
+    //     }
+
+    //     return appResponse(updatedPermission);
+    // });
+
+    // rejectPermission = catchServiceAsync(async (permissionId, userAdminId, reason) => {
+    //     const filter = { _id: permissionId };
+    //     const update = {
+    //         status: "Rechazado",
+    //         approvedBy: userAdminId,
+    //         reasonForRejection: reason,
+    //     };
+
+    //     // Usamos findOneAndUpdate para realizar la operación atómica
+    //     const updatedPermission = await _permission.findOneAndUpdate(filter, update, {
+    //         new: true, // Devuelve el documento actualizado
+    //     });
+
+    //     if (!updatedPermission) {
+    //         throw new AppError("Permiso no encontrado", 404);
+    //     }
+
+    //     return appResponse(updatedPermission);
+    // });
+
+
+
+
+
+
+
     approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
         const permission = await _permission.findById(permissionId);
         if (!permission) {
@@ -40,7 +82,7 @@ module.exports = class PermissionService extends BaseService {
         permission.approvedBy = userAdminId;
         await permission.save();
 
-        return permission;
+        return { data: permission };
     });
 
     rejectPermission = catchServiceAsync(async (permissionId, userAdminId, reason) => {
@@ -54,6 +96,7 @@ module.exports = class PermissionService extends BaseService {
         permission.reasonForRejection = reason;
         await permission.save();
 
-        return permission;
+        return { data: permission };
+
     });
 };

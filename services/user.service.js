@@ -15,7 +15,7 @@ module.exports = class UserService extends BaseService {
             throw new AppError("El email ya está registrado", 400);
         }
         const newUser = await _user.create(data);
-        return newUser;
+        return { data: newUser }
     });
 
     updateUserRole = catchServiceAsync(async (userId, newRole) => {
@@ -25,6 +25,6 @@ module.exports = class UserService extends BaseService {
         }
         user.role = newRole;
         await user.save();
-        return user;
+        return { data: user }
     });
 };

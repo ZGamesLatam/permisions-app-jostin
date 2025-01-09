@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-const bcrypt = require('bcryptjs'); // si quieres sin AuthUtils
+const { hashPassword } = require('../utils/auth');
+
 
 const UserSchema = new Schema({
 
@@ -28,7 +29,7 @@ const UserSchema = new Schema({
 
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await hashPassword(this.password);
     next();
 });
 
