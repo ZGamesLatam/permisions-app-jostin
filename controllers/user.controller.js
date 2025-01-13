@@ -10,6 +10,11 @@ module.exports = class UserController extends BaseController {
         super(UserService);
         _userService = UserService;
     }
+    login = catchControllerAsync(async (req, res) => {
+        const { email, password } = req.body;
+        const result = await _userService.login(email, password);
+        return appResponse(res, result);
+    });
     createUser = catchControllerAsync(async (req, res) => {
         const { body } = req;
         const newUser = await _userService.createUser(body);

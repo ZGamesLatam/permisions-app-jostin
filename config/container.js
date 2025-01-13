@@ -12,14 +12,16 @@ const {
     ExampleService,
     PermissionService,
     UserService,
-    PermissionTypeService
+    PermissionTypeService,
+    RoleService
 } = require("../services");
 //Controllers
 const {
     ExampleController,
     PermissionController,
     UserController,
-    PermissionTypeController
+    PermissionTypeController,
+    RoleController
 } = require("../controllers");
 
 //Startup
@@ -31,7 +33,8 @@ const {
     ExampleRoutes,
     PermissionRoutes,
     UserRoutes,
-    PermissionTypeRoutes
+    PermissionTypeRoutes,
+    RoleRoutes
 } = require("../routes/api/index");
 
 //Models
@@ -39,7 +42,8 @@ const {
     Example,
     Permission,
     User,
-    PermissionType
+    PermissionType,
+    Role
 } = require("../models");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -60,6 +64,7 @@ container
         PermissionService: asClass(PermissionService).singleton(),
         UserService: asClass(UserService).singleton(),
         PermissionTypeService: asClass(PermissionTypeService).singleton(),
+        RoleService: asClass(RoleService).singleton(),
     })
     .register({
         //Configuración de los controladores
@@ -67,6 +72,7 @@ container
         PermissionController: asClass(PermissionController.bind(PermissionController)).singleton(),
         UserController: asClass(UserController.bind(UserController)).singleton(),
         PermissionTypeController: asClass(PermissionTypeController.bind(PermissionTypeController)).singleton(),
+        RoleController: asClass(RoleController.bind(RoleController)).singleton(),
     })
     .register({
         //Configuración de rutas
@@ -74,13 +80,15 @@ container
         PermissionRoutes: asFunction(PermissionRoutes).singleton(),
         UserRoutes: asFunction(UserRoutes).singleton(),
         PermissionTypeRoutes: asFunction(PermissionTypeRoutes).singleton(),
+        RoleRoutes: asFunction(RoleRoutes).singleton(),
     })
     .register({
         //Configuración de modelos
         Example: asValue(Example),
         Permission: asValue(Permission),
         User: asValue(User),
-        PermissionType: asValue(PermissionType)
+        PermissionType: asValue(PermissionType),
+        Role: asValue(Role),
 
 
     })

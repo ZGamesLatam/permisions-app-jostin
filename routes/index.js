@@ -9,16 +9,19 @@ module.exports = function ({
   ExampleRoutes,
   PermissionRoutes,
   UserRoutes,
-  PermissionTypeRoutes
+  PermissionTypeRoutes,
+  RoleRoutes
 }) {
   const router = express.Router();
   const apiRouter = express.Router();
 
-  apiRouter.use(express.json()).use(cors()).use(morgan("dev")).use(express.urlencoded({ extended: true }));
-  apiRouter.use("/example", ExampleRoutes);
+  apiRouter.use(express.json()).use(cors())
+    .use(morgan("dev"))
+    .use(express.urlencoded({ extended: true }));
   apiRouter.use("/permission", PermissionRoutes);
   apiRouter.use("/user", UserRoutes);
   apiRouter.use("/permission-type", PermissionTypeRoutes)
+  apiRouter.use("/role", RoleRoutes);
 
   router.use("/v1/api", apiRouter);
   router.use("/", (req, res) => {

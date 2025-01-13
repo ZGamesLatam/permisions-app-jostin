@@ -11,6 +11,22 @@ module.exports = class UserService extends BaseService {
         _user = User;
         _authUtils = AuthUtils;
     }
+    login = catchServiceAsync(async (email, password) => {
+        const user = await _user.findOne({ email });
+        if (!user) {
+            throw new AppError("Credenciales inválidas", 401);
+        }
+
+        const isValidPassword = await _authUtils.comparePassword(password, user.password);
+        if (!isValidPassword) {
+            throw new AppError("Credenciales inválidas", 401);
+        }
+
+        const token = _authUtils.generateToken(user._id);
+
+        return { data: { token, user } };
+    });
+
     createUser = catchServiceAsync(async (data) => {
         const existing = await _user.findOne({ email: data.email });
         if (existing) {
@@ -23,19 +39,5 @@ module.exports = class UserService extends BaseService {
 
         const newUser = await _user.create(data);
         return { data: newUser };
-    });
-
-    updateUserRole = catchServiceAsync(async (userId, newRole) => {
-        const updatedUser = await _user.findOneAndUpdate(
-            { _id: userId },
-            { role: newRole },
-            { new: true }
-        );
-
-        if (!updatedUser) {
-            throw new AppError("Usuario no encontrado", 404);
-        }
-
-        return { data: updatedUser };
     });
 };
