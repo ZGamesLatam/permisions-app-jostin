@@ -1,6 +1,10 @@
 const OUTCOME_RESULT = {
   LOST: "Lost",
   WON: "Won",
+
+};
+
+const STATUS_PERMISSION = {
   APPROVED: "Approved",
   REJECTED: "Rejected",
 };
@@ -10,4 +14,4 @@ const ROL = {
   EMPLOYEE: "employee",
 };
 
-module.exports = { OUTCOME_RESULT, ROL };
+module.exports = { OUTCOME_RESULT, ROL, STATUS_PERMISSION };

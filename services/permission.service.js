@@ -2,7 +2,7 @@
 const catchServiceAsync = require("../utils/catch-service-async");
 const BaseService = require("./base.service");
 const AppError = require("../utils/app-error");
-const { OUTCOME_RESULT } = require("../utils/constants");
+const { STATUS_PERMISSION } = require("../utils/constants");
 let _permission = null;
 let _permissionType = null;
 
@@ -31,7 +31,7 @@ module.exports = class PermissionService extends BaseService {
         const updatedPermission = await _permission.findOneAndUpdate(
             { _id: permissionId },
             {
-                status: OUTCOME_RESULT.APPROVED,
+                status: STATUS_PERMISSION.APPROVED,
                 approvedBy: userAdminId,
             },
             { new: true }
@@ -48,7 +48,7 @@ module.exports = class PermissionService extends BaseService {
         const updatedPermission = await _permission.findOneAndUpdate(
             { _id: permissionId },
             {
-                status: OUTCOME_RESULT.REJECTED,
+                status: STATUS_PERMISSION.REJECTED,
                 approvedBy: userAdminId,
                 reasonForRejection: reason,
             },

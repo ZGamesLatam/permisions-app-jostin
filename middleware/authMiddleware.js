@@ -10,7 +10,7 @@ const protect = ({ User, config }) => asyncHandler(async (req, res, next) => {
       req.user = await User.findOne({ _id: decoded.id }).select("-password");
       next();
     } catch (error) {
-      throw new AppError("No autorizado");
+      throw new AppError("No autorizado", 401);
     }
   }
   if (!token) {
