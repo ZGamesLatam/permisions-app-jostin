@@ -13,9 +13,30 @@ module.exports = class PermissionService extends BaseService {
         _permission = Permission;
         _permissionType = PermissionType;
     }
+    getAllPermissions = catchServiceAsync(async (filter) => {
+        const permissions = await _permission
+            .find(filter)
+            .populate("userId", "firstName lastName")
+            .populate("permissionTypeId", "name")
+            .exec();
+
+        const totalCount = await _permission.countDocuments(filter);
+
+        return {
+            data: {
+                result: permissions,
+                totalCount,
+            }
+
+        };
+    });
 
     createWithType = catchServiceAsync(async (permissionData) => {
-        const { permissionTypeId } = permissionData;
+        const { permissionTypeId, userId } = permissionData;
+
+        if (!userId) {
+            throw new AppError("El campo userId es obligatorio", 400);
+        }
 
         const typeExists = await _permissionType.findById(permissionTypeId);
         if (!typeExists) {

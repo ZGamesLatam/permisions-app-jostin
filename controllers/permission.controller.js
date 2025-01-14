@@ -8,6 +8,11 @@ module.exports = class PermissionController extends BaseController {
         super(PermissionService);
         _permissionService = PermissionService;
     }
+    getAllPermissions = catchControllerAsync(async (req, res) => {
+        const filter = req.query.filter ? JSON.parse(req.query.filter) : {}; // Parsea el filtro si existe
+        const permissions = await _permissionService.getAllPermissions(filter);
+        return appResponse(res, permissions);
+    });
     createWithType = catchControllerAsync(async (req, res) => {
         const { body } = req;
         const newPermission = await _permissionService.createWithType(body);

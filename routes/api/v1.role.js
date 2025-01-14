@@ -3,11 +3,14 @@ const { Router } = require("express");
 module.exports = function ({ RoleController }) {
     const router = Router();
 
-    router.post("/", RoleController.create);
-    router.get("/", RoleController.getAll);
-    router.get("/:id", RoleController.getOne);
-    router.put("/:id", RoleController.update);
-    router.delete("/:id", RoleController.delete);
+    router.get("/get-rols", RoleController.getAll);
+    router.get("/get-rol/:id", RoleController.getOne);
+
+    router.post("/create-rol", RoleController.create);
+
+    router.put("/update-rol/:id", RoleController.update);
+
+    router.delete("/delete-rol/:id", RoleController.delete);
 
     return router;
 };
