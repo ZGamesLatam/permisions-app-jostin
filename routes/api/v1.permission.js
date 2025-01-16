@@ -8,6 +8,7 @@ module.exports = function ({ PermissionController, AuthMiddleware, User, }) {
 
     router.get("/get-all-permission", PermissionController.getAllPermissions);
     router.get("/get-one-permission/:id", PermissionController.getOne);
+    router.get("/filter-permissions", PermissionController.findAllPermissions);
 
     router.post("/create-permission-type", PermissionController.createWithType);
     router.post("/create-permission", PermissionController.create);

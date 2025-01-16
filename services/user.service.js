@@ -11,6 +11,10 @@ module.exports = class UserService extends BaseService {
         _user = User;
         _authUtils = AuthUtils;
     }
+    getAllUsers = catchServiceAsync(async () => {
+        return await _user.find().select("firstName lastName");
+    });
+
     login = catchServiceAsync(async (email, password) => {
         const user = await _user.findOne({ email });
         if (!user) {
@@ -24,7 +28,12 @@ module.exports = class UserService extends BaseService {
 
         const token = _authUtils.generateToken(user._id);
 
-        return { data: { token, user } };
+        return {
+            data: {
+                token,
+                userId: user._id
+            }
+        };
     });
 
     createUser = catchServiceAsync(async (data) => {

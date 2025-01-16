@@ -3,7 +3,7 @@ const { Router } = require("express");
 
 module.exports = function ({ PermissionTypeController }) {
     const router = Router();
-    router.get("/get-permissions-type", PermissionTypeController.getAll);
+    router.get("/get-permissions-type", PermissionTypeController.getAllPermissionTypes);
     router.get("/get-permission-type/:id", PermissionTypeController.getOne);
 
     router.post("/create-permission-type", PermissionTypeController.createPermissionType);

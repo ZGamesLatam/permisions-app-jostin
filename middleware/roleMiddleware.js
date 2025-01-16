@@ -3,12 +3,12 @@ const AppError = require("../utils/app-error");
 
 const checkRole = ({ roleName, User }) =>
     asyncHandler(async (req, res, next) => {
-        const { userId } = req.body;
+        const { userAdminId } = req.body;
 
-        if (!userId) {
+        if (!userAdminId) {
             throw new AppError("No se proporcionó el ID del usuario", 400);
         }
-        const user = await User.findById(userId).populate("role");
+        const user = await User.findById(userAdminId).populate("role");
 
         if (!user) {
             throw new AppError("Usuario no encontrado", 404);
