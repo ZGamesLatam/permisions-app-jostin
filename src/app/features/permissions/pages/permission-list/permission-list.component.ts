@@ -72,6 +72,8 @@ export class PermissionListComponent implements OnInit {
   public endDateTemplate?: TemplateRef<HTMLElement>;
   @ViewChild('status', { static: true })
   public statusTemplate?: TemplateRef<HTMLElement>;
+  @ViewChild('attachment', { static: true })
+  public attachmentTemplate?: TemplateRef<HTMLElement>;
   @ViewChild('actions', { static: true })
   public actionsTemplate?: TemplateRef<HTMLElement>;
 
@@ -92,6 +94,39 @@ export class PermissionListComponent implements OnInit {
     //   this.currentPage = 1;
     //   this.fetchPermissions();
     // });
+  }
+
+  downloadAttachment(attachment: {
+    content?: string;
+    contentType?: string;
+    originalName?: string;
+  }): void {
+    if (!attachment || !attachment.content) {
+      console.error('El archivo adjunto no tiene contenido válido.');
+      return;
+    }
+
+    const base64Content = attachment.content.startsWith('data:')
+      ? attachment.content.split(',')[1]
+      : attachment.content;
+
+    try {
+      // Decodifica la cadena base64
+      const byteCharacters = atob(base64Content);
+      const byteNumbers = Array.from(byteCharacters, (char) =>
+        char.charCodeAt(0)
+      );
+      const byteArray = new Uint8Array(byteNumbers);
+
+      // Crea un Blob y descarga el archivo
+      const blob = new Blob([byteArray], { type: attachment.contentType });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = attachment.originalName || 'archivo.pdf';
+      link.click();
+    } catch (error) {
+      console.error('Error al decodificar el archivo:', error);
+    }
   }
 
   private suscribeFilter(): void {
@@ -128,7 +163,12 @@ export class PermissionListComponent implements OnInit {
       limit: DEFAULT_NGX_DATATABLE_PAGINATION.LIMIT,
       page: DEFAULT_NGX_DATATABLE_PAGINATION.PAGE,
       columns: [
-        ...PERMISSION_TABLE_COLUMNS,
+        ...PERMISSION_TABLE_COLUMNS.map((column) => {
+          if (column.name === 'attachment.download') {
+            return { ...column, cellTemplate: this.attachmentTemplate };
+          }
+          return column;
+        }),
         {
           name: 'Acciones',
           width: 100,
@@ -138,6 +178,7 @@ export class PermissionListComponent implements OnInit {
       ],
     });
   }
+
   public onChangeLimit(limit: number): void {
     this.config$.next({
       ...this.config$.value,
@@ -177,6 +218,7 @@ export class PermissionListComponent implements OnInit {
   }
 
   openModal(action: string, permisoId: string): void {
+    console.log('Acción:', action, 'Permiso ID:', permisoId); // <-- Agregado para depuración
     this.selectedAction = action;
     this.selectedPermisoId = permisoId;
 
@@ -218,25 +260,26 @@ export class PermissionListComponent implements OnInit {
     });
   }
 
-  // handleConfirmAction(): void {
-  //   if (this.selectedAction === 'aprobar' && this.selectedPermisoId) {
-  //     this.aprobarPermiso(this.selectedPermisoId);
-  //   } else if (this.selectedAction === 'rechazar' && this.selectedPermisoId) {
-  //     this.rechazarPermiso(this.selectedPermisoId);
-  //   }
+  handleConfirmAction(): void {
+    if (this.selectedAction === 'aprobar' && this.selectedPermisoId) {
+      this.aprobarPermiso(this.selectedPermisoId);
+    } else if (this.selectedAction === 'rechazar' && this.selectedPermisoId) {
+      this.rechazarPermiso(this.selectedPermisoId);
+    }
 
-  //   this.closeModal();
-  // }
+    this.closeModal();
+  }
 
-  // handleCancelAction(): void {
-  //   this.closeModal();
-  // }
+  handleCancelAction(): void {
+    this.closeModal();
+  }
 
   closeModal(): void {
     this.showModal = false;
   }
 
   aprobarPermiso(permissionId: string): void {
+    console.log('Aprobando permiso ID:', permissionId); // <-- Debug
     const userAdminId = localStorage.getItem('userAdminId');
     if (!userAdminId) {
       console.error('El ID del usuario administrador no está definido');
@@ -248,7 +291,7 @@ export class PermissionListComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Permiso aprobado exitosamente');
-          this.data$ = this.fetchPermissions(this.setFilter());
+          this.data$ = this.fetchPermissions(this.setFilter()); // Recargar tabla
         },
         error: (err) => {
           console.error('Error al aprobar el permiso:', err);
@@ -268,10 +311,13 @@ export class PermissionListComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Permiso rechazado exitosamente');
-          this.fetchPermissions(this.setFilter());
+          this.data$ = this.fetchPermissions(this.setFilter()); // Recarga los datos
         },
         error: (err) => {
           console.error('Error al rechazar el permiso:', err);
+        },
+        complete: () => {
+          console.log('Rechazar permiso completado');
         },
       });
   }

@@ -20,6 +20,28 @@
         ></button>
       </div>
       <div class="modal-body p-4">
+        <!-- Subir Documento -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <label for="attachment" class="form-label fw-bold"
+              >Subir Documento</label
+            >
+            <input
+              type="file"
+              id="attachment"
+              class="form-control"
+              (change)="handleFileInput($event)"
+              accept="application/pdf"
+            />
+            <small class="text-muted">Solo se permiten archivos PDF.</small>
+            <div *ngIf="selectedFile" class="mt-2">
+              <span class="text-success"
+                >Archivo: {{ selectedFile?.name }}</span
+              >
+            </div>
+          </div>
+        </div>
+
         <form [formGroup]="createPermissionForm">
           <!-- Tipo de Permiso -->
           <div class="row mb-4">
@@ -93,7 +115,7 @@
           type="button"
           class="btn btn-success"
           (click)="handleConfirm()"
-          [disabled]="createPermissionForm.invalid"
+          [disabled]="createPermissionForm.invalid || !selectedFile"
         >
           <i class="bi bi-check-circle"></i> Crear
         </button>

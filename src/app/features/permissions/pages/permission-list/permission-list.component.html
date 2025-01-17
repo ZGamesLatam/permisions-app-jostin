@@ -1,4 +1,5 @@
 <app-permission-filter-form></app-permission-filter-form>
+
 <app-create-permission-modal
   *ngIf="showCreateModal"
   [show]="showCreateModal"
@@ -17,11 +18,60 @@
   <div class="card-header bg-success">
     <h5 class="text-white">Permisos Solicitados</h5>
   </div>
+
+  <!-- Modal de Confirmación -->
+  <app-permission-modal
+    *ngIf="showModal"
+    [title]="modalTitle"
+    [message]="modalMessage"
+    [confirmButtonText]="'Confirmar'"
+    [cancelButtonText]="'Cancelar'"
+    [show]="showModal"
+    (onConfirm)="handleConfirmAction()"
+    (onCancel)="handleCancelAction()"
+  ></app-permission-modal>
+
+  <!-- Tabla con acciones -->
   <shared-tables-ngx-datatable
     [config]="config$ | async"
     [data]="data$ | async"
     (onChangeLimit)="onChangeLimit($event)"
     (onChangePage)="onChangePage($event)"
   >
+    <ng-template #attachment let-row="row">
+      <button
+        *ngIf="row.attachment"
+        class="btn btn-primary btn-sm"
+        (click)="downloadAttachment(row.attachment)"
+      >
+        Descargar
+      </button>
+    </ng-template>
+
+    <ng-template #actions let-row="row">
+      <div class="d-flex align-items-center justify-content-center gap-2">
+        <!-- Botón Aprobar -->
+        <button
+          class="btn btn-outline-success btn-xs"
+          type="button"
+          placement="left"
+          [ngbTooltip]="'Aprobar permiso'"
+          (click)="openModal('aprobar', row._id)"
+        >
+          <i class="fa fa-check"></i>
+        </button>
+
+        <!-- Botón Rechazar -->
+        <button
+          class="btn btn-outline-danger btn-xs"
+          type="button"
+          placement="left"
+          [ngbTooltip]="'Rechazar permiso'"
+          (click)="openModal('rechazar', row._id)"
+        >
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </ng-template>
   </shared-tables-ngx-datatable>
 </div>

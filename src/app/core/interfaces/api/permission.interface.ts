@@ -16,4 +16,5 @@ export interface Permission {
   startDate: string;
   endDate: string;
   status: string;
+  attachment: string;
 }

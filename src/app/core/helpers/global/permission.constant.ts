@@ -29,4 +29,9 @@ export const PERMISSION_TABLE_COLUMNS = [
     prop: 'status',
     width: 150,
   },
+  {
+    name: 'attachment.download',
+    cellTemplate: undefined, // Aquí será asignada dinámicamente en el componente
+    width: 150,
+  },
 ];

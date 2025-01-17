@@ -14,6 +14,7 @@ export class CreatePermissionModalComponent implements OnInit {
   @Output() onCancel = new EventEmitter<void>();
 
   public createPermissionForm: FormGroup;
+  public selectedFile: File | null = null;
   public permissionTypes$: Observable<{ label: string; value: string }[]> = of(
     []
   );
@@ -47,15 +48,52 @@ export class CreatePermissionModalComponent implements OnInit {
     });
   }
 
+  handleFileInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      if (file.type === 'application/pdf') {
+        this.selectedFile = file;
+        console.log('Archivo seleccionado:', file.name);
+      } else {
+        console.error(
+          'Formato de archivo no permitido. Solo PDFs son válidos.'
+        );
+        this.selectedFile = null;
+      }
+    }
+  }
+
   handleConfirm(): void {
     if (this.createPermissionForm.valid) {
-      // Agregar automáticamente el userId desde el localStorage
-      const permissionData = {
-        ...this.createPermissionForm.value,
-        userId: localStorage.getItem('userAdminId'), // Asegúrate de usar la clave correcta
-      };
+      const formData = new FormData();
 
-      this.onConfirm.emit(permissionData); // Emitir el objeto completo con userId
+      // Agregar datos del formulario
+      formData.append(
+        'permissionTypeId',
+        this.createPermissionForm.get('permissionTypeId')?.value
+      );
+      formData.append(
+        'startDate',
+        this.createPermissionForm.get('startDate')?.value
+      );
+      formData.append(
+        'endDate',
+        this.createPermissionForm.get('endDate')?.value
+      );
+      formData.append(
+        'description',
+        this.createPermissionForm.get('description')?.value
+      );
+      formData.append('userId', localStorage.getItem('userAdminId') || '');
+
+      // Adjuntar el archivo si existe
+      if (this.selectedFile) {
+        formData.append('attachment', this.selectedFile);
+      }
+
+      // Emitir el FormData
+      this.onConfirm.emit(formData);
     }
   }
 
