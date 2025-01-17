@@ -1,0 +1,217 @@
+@if (betshopFilterForm) {
+<form
+  class="form theme-form"
+  [formGroup]="betshopFilterForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="card-body">
+    <div class="modal-body">
+      <div class="row g-2">
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="name" class="form-label">
+              {{ "betshopManagement.betshops.name" | translate }} :
+            </label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+              [sharedMaxCharacters]="BETSHOP_VALIDATIONS.NAME.MAX_LENGTH"
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="ipClient" class="form-label">
+              {{ "betshopManagement.betshops.ipClient" | translate }} :
+            </label>
+            <input
+              type="text"
+              id="ipClient"
+              formControlName="ipClient"
+              class="form-control"
+              [sharedMaxCharacters]="BETSHOP_VALIDATIONS.IP_CLIENT.MAX_LENGTH"
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="currencyId" class="form-label">
+              {{ "words.currency" | translate }} :
+            </label>
+            <ng-select
+              id="currencyId"
+              formControlName="currencyId"
+              [items]="currencies$ | async"
+              [bindLabel]="'label'"
+              [bindValue]="'value'"
+              [clearable]="false"
+              [notFoundText]="'words.noItemsFound' | translate"
+              (search)="
+                onSearchSelect(NG_SELECT_QUERIES.CURRENCIES, $event.term)
+              "
+              (close)="onSearchSelect(NG_SELECT_QUERIES.CURRENCIES)"
+              (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.CURRENCIES)"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="countryId" class="form-label">
+              {{ "words.country" | translate }} :
+            </label>
+            <ng-select
+              id="countryId"
+              formControlName="countryId"
+              [items]="countries$ | async"
+              [bindLabel]="'label'"
+              [bindValue]="'value'"
+              [clearable]="false"
+              [notFoundText]="'words.noItemsFound' | translate"
+              (search)="
+                onSearchSelect(NG_SELECT_QUERIES.COUNTRIES, $event.term)
+              "
+              (close)="onSearchSelect(NG_SELECT_QUERIES.COUNTRIES)"
+              (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.COUNTRIES)"
+              (change)="onCountryChange($event)"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                @if (item.icon) {
+                <i
+                  class="flag-icon flag-icon-{{ item.icon | lowercase }} m-r-5 "
+                ></i>
+                }
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                @if (item.icon) {
+                <i
+                  class="flag-icon flag-icon-{{ item.icon | lowercase }} m-r-5"
+                ></i>
+                }
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="cityId" class="form-label">
+              {{ "words.city" | translate }} :
+            </label>
+            <ng-select
+              id="cityId"
+              formControlName="cityId"
+              [items]="cities$ | async"
+              [bindLabel]="'label'"
+              [bindValue]="'value'"
+              [clearable]="false"
+              [notFoundText]="'words.noItemsFound' | translate"
+              (search)="onSearchSelect(NG_SELECT_QUERIES.CITIES, $event.term)"
+              (close)="onSearchSelect(NG_SELECT_QUERIES.CITIES)"
+              (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.CITIES)"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="address" class="form-label">
+              {{ "betshopManagement.betshops.address" | translate }} :
+            </label>
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              class="form-control"
+              [sharedMaxCharacters]="BETSHOP_VALIDATIONS.ADDRESS.MAX_LENGTH"
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="isVisible" class="form-label">
+              {{ "betshopManagement.betshops.isVisible" | translate }} :
+            </label>
+            <ng-select
+              id="isVisible"
+              formControlName="isVisible"
+              [items]="isVisible$ | async"
+              [bindLabel]="'label'"
+              [bindValue]="'value'"
+              [clearable]="false"
+              [notFoundText]="'words.noItemsFound' | translate"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+          <div class="form-group">
+            <label for="isActive" class="form-label">
+              {{ "betshopManagement.betshops.isActive" | translate }} :
+            </label>
+            <ng-select
+              id="isActive"
+              formControlName="isActive"
+              [items]="isActive$ | async"
+              [bindLabel]="'label'"
+              [bindValue]="'value'"
+              [clearable]="false"
+              [notFoundText]="'words.noItemsFound' | translate"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item.label | translate }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex align-items-center justify-content-end gap-2">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="onReset()"
+      >
+        {{ "btn.reset" | translate }}
+      </button>
+      <button type="submit" class="btn btn-outline-secondary">
+        {{ "btn.filter" | translate }}
+      </button>
+    </div>
+  </div>
+</form>
+
+}

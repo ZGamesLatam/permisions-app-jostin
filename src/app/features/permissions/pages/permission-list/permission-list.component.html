@@ -1,0 +1,27 @@
+<app-permission-filter-form></app-permission-filter-form>
+<app-create-permission-modal
+  *ngIf="showCreateModal"
+  [show]="showCreateModal"
+  [title]="'Crear Permiso'"
+  (onConfirm)="handleCreatePermission($event)"
+  (onCancel)="closeCreateModal()"
+></app-create-permission-modal>
+
+<div class="text-end mb-3 me-3">
+  <button type="button" class="btn btn-success" (click)="openCreateModal()">
+    Crear Permiso
+  </button>
+</div>
+
+<div class="card m-3">
+  <div class="card-header bg-success">
+    <h5 class="text-white">Permisos Solicitados</h5>
+  </div>
+  <shared-tables-ngx-datatable
+    [config]="config$ | async"
+    [data]="data$ | async"
+    (onChangeLimit)="onChangeLimit($event)"
+    (onChangePage)="onChangePage($event)"
+  >
+  </shared-tables-ngx-datatable>
+</div>

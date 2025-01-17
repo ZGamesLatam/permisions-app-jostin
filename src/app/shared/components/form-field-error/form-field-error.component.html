@@ -1,0 +1,10 @@
+@if (shouldShowErrors()) {
+<div class="text-danger">
+  @for (error of listOfErrors(); track $index) {
+  <small class="text-danger">
+    {{ error }}
+  </small>
+
+  }
+</div>
+}

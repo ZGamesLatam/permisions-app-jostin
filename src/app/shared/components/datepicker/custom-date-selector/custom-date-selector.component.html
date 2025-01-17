@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="row">
+    @if (data === "year") {
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4 text-center mx-auto">
+      <h6>{{ "datepicker.choosePersonalizedYears" | translate }}</h6>
+      <div class="container">
+        <div class="card p-2 rounded-3 border border-color-custom">
+          <div class="row">
+            <div
+              class="col-4 px-0"
+              *ngFor="let year of years"
+              style="padding-top: 10px; padding-bottom: 10px"
+            >
+              <button
+                class="custom-btn-datapicker"
+                type="button"
+                [class.selected]="isSelectedYear(year)"
+                (click)="selectYear(year)"
+              >
+                {{ year }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @if (data === "month" || data === "year") {
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4 text-center mx-auto">
+      <h6>{{ "datepicker.choosePersonalizedMonths" | translate }}</h6>
+      <div class="container">
+        <div class="card p-2 rounded-3 border border-color-custom">
+          <div class="row">
+            <div
+              class="col-4 px-0"
+              *ngFor="let month of months"
+              style="padding-top: 10px; padding-bottom: 10px"
+            >
+              <button
+                class="custom-btn-datapicker"
+                type="button"
+                [class.selected]="isSelectedMonth(month)"
+                (click)="selectMonth(month)"
+              >
+                {{ "words." + month | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @if (data === "day" || data === "month" || data === "year") {
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4 text-center mx-auto">
+      <h6>{{ "datepicker.choosePersonalizedDays" | translate }}</h6>
+      <div class="container">
+        <div class="card p-2 rounded-3 border border-color-custom">
+          <div class="row">
+            <div class="col-2 p-0" *ngFor="let day of days">
+              <button
+                class="custom-btn-datapicker"
+                type="button"
+                [class.selected]="isSelectedDay(day)"
+                (click)="selectDay(day)"
+              >
+                {{ day }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @if (data === "week") {
+    <div class="col-9 text-center mt-4 mx-auto">
+      <h6>{{ "datepicker.choosePersonalizedDaysOfWeek" | translate }}</h6>
+      <div class="container">
+        <div class="card p-2 rounded-3 border border-color-custom">
+          <div class="row">
+            <div class="col-3 p-0" *ngFor="let weekDay of weekDays.slice(0, 4)">
+              <button
+                type="button"
+                class="custom-btn-datapicker"
+                [class.selected]="isSelectedWeekDay(weekDay)"
+                (click)="selectWeekDay(weekDay)"
+              >
+                {{ "words." + weekDay | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 p-0" *ngFor="let weekDay of weekDays.slice(4, 7)">
+              <button
+                class="custom-btn-datapicker"
+                type="button"
+                [class.selected]="isSelectedWeekDay(weekDay)"
+                (click)="selectWeekDay(weekDay)"
+              >
+                {{ "words." + weekDay | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  @if (showButton) {
+  <div class="modal-footer">
+    <button class="btn btn-secondary" type="button" (click)="closeModal()">
+      {{ "btn.accept" | translate }}
+    </button>
+  </div>
+  }
+</div>

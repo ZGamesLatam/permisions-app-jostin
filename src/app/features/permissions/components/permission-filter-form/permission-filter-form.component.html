@@ -1,0 +1,63 @@
+<div class="card m-3">
+  <div class="card-header bg-success">
+    <h5 class="text-white">Filtrar Permisos</h5>
+  </div>
+  <form
+    class="form theme-form"
+    [formGroup]="permissionsFilterForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md-4">
+          <label for="userName" class="form-label">Usuario:</label>
+          <input
+            type="text"
+            id="userName"
+            formControlName="userName"
+            class="form-control"
+            placeholder="Buscar por nombre de usuario"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="status" class="form-label">Estado:</label>
+          <ng-select
+            id="status"
+            formControlName="status"
+            [items]="statuses$ | async"
+            [bindLabel]="'label'"
+            [bindValue]="'value'"
+            [clearable]="true"
+          >
+          </ng-select>
+        </div>
+        <div class="col-md-4">
+          <label for="permissionType" class="form-label"
+            >Tipo de Permiso:</label
+          >
+          <ng-select
+            id="permissionType"
+            formControlName="permissionType"
+            [items]="permissionTypes$ | async"
+            [bindLabel]="'label'"
+            [bindValue]="'value'"
+            [clearable]="true"
+          >
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-flex align-items-center justify-content-end gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          (click)="onReset()"
+        >
+          Reiniciar
+        </button>
+        <button type="submit" class="btn btn-success">Filtrar</button>
+      </div>
+    </div>
+  </form>
+</div>

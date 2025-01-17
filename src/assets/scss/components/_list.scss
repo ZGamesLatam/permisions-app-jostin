@@ -1,0 +1,38 @@
+/**=====================
+     17. List CSS Start
+==========================**/
+.list-group-item.active {
+  background-color: var(--theme-deafult);
+  border-color: var(--theme-deafult);
+}
+.list-group {
+  i {
+    margin-right: $list-group-margin;
+  }
+  img {
+    height: 40px;
+    width: 40px;
+    margin-right: $list-group-margin;
+  }
+}
+.default-list {
+  .list-group-item {
+    color: $theme-body-font-color;
+    &.active {
+      color: $white;
+    }
+  }
+}
+
+.list-circle {
+  .item {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    margin-right: 4px;
+  }
+}
+/**=====================
+     17. List CSS Ends
+==========================**/

@@ -1,0 +1,225 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="modal-basic-title">
+    {{ titleModal | translate }}
+  </h5>
+  <button type="button" class="btn-close" (click)="closeModal()"></button>
+</div>
+
+@if (betshopForm) {
+<form class="form theme-form" [formGroup]="betshopForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <div class="row g-2">
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="name" class="form-label">
+            {{ "betshopManagement.betshops.name" | translate }} :
+          </label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="form-control"
+            [sharedMaxCharacters]="BETSHOP_VALIDATIONS.NAME.MAX_LENGTH"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="ipClient" class="form-label">
+            {{ "betshopManagement.betshops.ipClient" | translate }} :
+          </label>
+          <input
+            type="text"
+            id="ipClient"
+            formControlName="ipClient"
+            class="form-control"
+            [sharedMaxCharacters]="BETSHOP_VALIDATIONS.IP_CLIENT.MAX_LENGTH"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="currencyId" class="form-label">
+            {{ "words.currency" | translate }} :
+          </label>
+          <ng-select
+            id="currencyId"
+            formControlName="currencyId"
+            [items]="currencies$ | async"
+            [bindLabel]="'label'"
+            [bindValue]="'value'"
+            [notFoundText]="'words.noItemsFound' | translate"
+            (search)="onSearchSelect(NG_SELECT_QUERIES.CURRENCIES, $event.term)"
+            (clear)="onSearchSelect(NG_SELECT_QUERIES.CURRENCIES)"
+            (close)="onSearchSelect(NG_SELECT_QUERIES.CURRENCIES)"
+            (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.CURRENCIES)"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="countryId" class="form-label">
+            {{ "words.country" | translate }} :
+          </label>
+          <ng-select
+            id="countryId"
+            formControlName="countryId"
+            [items]="countries$ | async"
+            [bindLabel]="'label'"
+            [bindValue]="'value'"
+            [notFoundText]="'words.noItemsFound' | translate"
+            (search)="onSearchSelect(NG_SELECT_QUERIES.COUNTRIES, $event.term)"
+            (clear)="onSearchSelect(NG_SELECT_QUERIES.COUNTRIES)"
+            (close)="onSearchSelect(NG_SELECT_QUERIES.COUNTRIES)"
+            (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.COUNTRIES)"
+            (change)="onCountryChange($event)"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              @if (item.icon) {
+              <i
+                class="flag-icon flag-icon-{{ item.icon | lowercase }} m-r-5 "
+              ></i>
+              }
+              <span>{{ item.label }}</span>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              @if (item.icon) {
+              <i
+                class="flag-icon flag-icon-{{ item.icon | lowercase }} m-r-5"
+              ></i>
+              }
+              <span>{{ item.label }}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="cityId" class="form-label">
+            {{ "words.city" | translate }} :
+          </label>
+          <ng-select
+            id="cityId"
+            formControlName="cityId"
+            [items]="cities$ | async"
+            [bindLabel]="'label'"
+            [bindValue]="'value'"
+            [notFoundText]="'words.noItemsFound' | translate"
+            (search)="onSearchSelect(NG_SELECT_QUERIES.CITIES, $event.term)"
+            (clear)="onSearchSelect(NG_SELECT_QUERIES.CITIES)"
+            (close)="onSearchSelect(NG_SELECT_QUERIES.CITIES)"
+            (scrollToEnd)="onScrollToEndSelect(NG_SELECT_QUERIES.CITIES)"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="address" class="form-label">
+            {{ "betshopManagement.betshops.address" | translate }} :
+          </label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            class="form-control"
+            [sharedMaxCharacters]="BETSHOP_VALIDATIONS.ADDRESS.MAX_LENGTH"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="latitude" class="form-label">
+            {{ "betshopManagement.betshops.coordinates" | translate }}
+            ({{ "betshopManagement.betshops.latitude" | translate }}) :
+          </label>
+          <input
+            type="number"
+            id="latitude"
+            formControlName="latitude"
+            class="form-control"
+            [sharedMaxCharacters]="BETSHOP_VALIDATIONS.LATITUDE.MAX_LENGTH"
+            [sharedDecimalInput]="{
+              intDigs: BETSHOP_VALIDATIONS.LATITUDE.INT,
+              decDigs: BETSHOP_VALIDATIONS.LATITUDE.DEC
+            }"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="form-group">
+          <label for="longitude" class="form-label">
+            {{ "betshopManagement.betshops.coordinates" | translate }}
+            ({{ "betshopManagement.betshops.longitude" | translate }}) :
+          </label>
+          <input
+            type="number"
+            id="longitude"
+            formControlName="longitude"
+            class="form-control"
+            [sharedMaxCharacters]="BETSHOP_VALIDATIONS.LONGITUDE.MAX_LENGTH"
+            [sharedDecimalInput]="{
+              intDigs: BETSHOP_VALIDATIONS.LONGITUDE.INT,
+              decDigs: BETSHOP_VALIDATIONS.LONGITUDE.DEC
+            }"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-2">
+        <div class="form-group">
+          <div class="animate-chk">
+            <label for="isVisible" class="d-block">
+              {{ "betshopManagement.betshops.isVisible" | translate }} :
+              <input
+                id="isVisible"
+                type="checkbox"
+                class="checkbox_animated m-l-5"
+                formControlName="isVisible"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-2">
+        <div class="form-group">
+          <div class="animate-chk">
+            <label for="isActive" class="d-block">
+              {{ "betshopManagement.betshops.isActive" | translate }} :
+              <input
+                id="isActive"
+                type="checkbox"
+                class="checkbox_animated m-l-5"
+                formControlName="isActive"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @if (activeButtonAction !== BUTTON_ACTIONS.VIEW) {
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeModal()">
+      {{ "btn.cancel" | translate }}
+    </button>
+    <button
+      type="submit"
+      class="btn btn-secondary"
+      [disabled]="betshopForm.invalid"
+    >
+      {{ "btn.save" | translate }}
+    </button>
+  </div>
+  }
+</form>
+}

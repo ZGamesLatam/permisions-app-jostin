@@ -1,0 +1,51 @@
+<form class="form-inline search-full" [class.open]="navServices.search">
+  <div class="form-group w-100 mb-0 item-search">
+    <input
+      class="form-control-plaintext"
+      [(ngModel)]="text"
+      [ngModelOptions]="{ standalone: true }"
+      (keyup)="searchTerm(text)"
+      type="text"
+      autocomplete="off"
+      placeholder="Search.."
+    />
+    <shared-feather-icons
+      [icon]="'x'"
+      class="close-search"
+      (click)="searchToggle()"
+    ></shared-feather-icons>
+    <div
+      class="Typeahead-menu"
+      [class.is-open]="searchResult"
+      *ngIf="menuItems?.length"
+      id="search-outer"
+    >
+      <div
+        class="ProfileCard u-cf"
+        *ngFor="let menuItem of menuItems | slice : 0 : 8"
+      >
+        <div class="ProfileCard-avatar">
+          <shared-svg-icon
+            [icon]="menuItem.icon || ''"
+            class="header-search"
+          ></shared-svg-icon>
+        </div>
+        <div class="ProfileCard-details">
+          <div class="ProfileCard-realName">
+            <a
+              [routerLink]="menuItem?.path"
+              class="realname"
+              (click)="removeFix()"
+              >{{ menuItem?.title ?? "" | translate }}</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="Typeahead-menu" [class.is-open]="searchResultEmpty">
+      <div class="tt-dataset tt-dataset-0">
+        <div class="EmptyMessage">Opps!! There are no result found.</div>
+      </div>
+    </div>
+  </div>
+</form>

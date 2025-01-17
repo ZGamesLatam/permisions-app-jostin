@@ -1,0 +1,103 @@
+<div
+  class="modal"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': show }"
+  style="z-index: 1050"
+>
+  <div
+    class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title fw-bold">
+          <i class="bi bi-plus-circle me-2"></i>{{ title }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="handleCancel()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-4">
+        <form [formGroup]="createPermissionForm">
+          <!-- Tipo de Permiso -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <label for="permissionTypeId" class="form-label fw-bold"
+                >Tipo de Permiso</label
+              >
+              <ng-select
+                id="permissionTypeId"
+                formControlName="permissionTypeId"
+                [items]="permissionTypes$ | async"
+                [bindLabel]="'label'"
+                [bindValue]="'value'"
+                [clearable]="true"
+                [notFoundText]="'No se encontraron tipos de permisos'"
+              >
+              </ng-select>
+            </div>
+          </div>
+          <!-- Fechas -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label for="startDate" class="form-label fw-bold"
+                >Fecha de Inicio</label
+              >
+              <input
+                type="date"
+                id="startDate"
+                formControlName="startDate"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="endDate" class="form-label fw-bold"
+                >Fecha de Fin</label
+              >
+              <input
+                type="date"
+                id="endDate"
+                formControlName="endDate"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <!-- Descripción -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <label for="description" class="form-label fw-bold"
+                >Descripción</label
+              >
+              <textarea
+                id="description"
+                formControlName="description"
+                class="form-control"
+                rows="4"
+                placeholder="Motivo del permiso"
+              ></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn btn-outline-secondary me-2"
+          (click)="handleCancel()"
+        >
+          <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="handleConfirm()"
+          [disabled]="createPermissionForm.invalid"
+        >
+          <i class="bi bi-check-circle"></i> Crear
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

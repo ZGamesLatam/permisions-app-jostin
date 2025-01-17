@@ -1,0 +1,17 @@
+.custom-btn-datapicker {
+    padding: 6px !important;
+    border: 0px solid #ccc !important;
+    border-radius: 5px !important;
+    background-color: #fff !important;
+    cursor: pointer !important;
+}
+
+.custom-btn-datapicker.selected {
+    background-color: #007bff !important;
+    border-radius: 20px !important;
+    color: #fff  !important;
+}
+
+.border-color-custom {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+}

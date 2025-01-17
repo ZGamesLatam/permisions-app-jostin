@@ -1,0 +1,121 @@
+<shared-breadcrumb
+  [title]="'betshopManagement.betshops.title'"
+  [items]="['betshopManagement.title']"
+  [active_item]="'betshopManagement.betshops.title'"
+></shared-breadcrumb>
+
+k
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <shared-accordions-toogle-panel
+        [contentComponent]="filterComponent"
+      ></shared-accordions-toogle-panel>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-end gap-2 mb-2">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              placement="top"
+              [ngbTooltip]="'words.reloadTable' | translate"
+              (click)="reloadDatatable()"
+            >
+              <i class="fa fa-repeat"></i>
+            </button>
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              placement="top"
+              [ngbTooltip]="'betshopManagement.betshops.add' | translate"
+              (click)="openModal(BUTTON_ACTIONS.ADD)"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <shared-tables-ngx-datatable
+            [config]="config$ | async"
+            [data]="data$ | async"
+            (onChangeLimit)="onChangeLimit($event)"
+            (onChangePage)="onChangePage($event)"
+          >
+          </shared-tables-ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <ng-template #detailReport let-row="row" let-rowIndex="rowIndex">
+  <button
+    class="btn btn-outline-secondary btn-xs"
+    type="button"
+    placement="right"
+    [ngbTooltip]="'betshopManagement.betshops.seeLinkedCashdesks' | translate"
+    (click)="redirectToLinkedCashdesks(row)"
+  >
+    <i class="fa fa-caret-right"></i>
+  </button>
+</ng-template>
+
+<ng-template #country let-row="row" let-rowIndex="rowIndex">
+  <i
+    class="flag-icon flag-icon-{{ row.cityId.countryId.code | lowercase }}"
+  ></i>
+  <span> {{ row.cityId.countryId.name }} </span>
+</ng-template>
+
+<ng-template #createdAt let-row="row" let-rowIndex="rowIndex">
+  <span> {{ row.createdAt | date : FORMAT_FOR_DATES }} </span>
+</ng-template>
+
+<ng-template #updatedAt let-row="row" let-rowIndex="rowIndex">
+  <span> {{ row.updatedAt | date : FORMAT_FOR_DATES }} </span>
+</ng-template>
+
+<ng-template #isVisible let-row="row" let-rowIndex="rowIndex">
+  <div class="list-circle">
+    <span
+      class="item"
+      [ngClass]="row.isVisible ? 'bg-success ' : 'bg-danger'"
+    ></span>
+    <span>{{ row.isVisible | booleanToYesNo | translate }}</span>
+  </div>
+</ng-template>
+
+<ng-template #isActive let-row="row" let-rowIndex="rowIndex">
+  <div class="list-circle">
+    <span
+      class="item"
+      [ngClass]="row.isActive ? 'bg-success ' : 'bg-danger'"
+    ></span>
+    <span>{{ row.isActive | booleanToYesNo | translate }}</span>
+  </div>
+</ng-template>
+
+<ng-template #actions let-row="row" let-rowIndex="rowIndex">
+  <div class="d-flex align-items-center justify-content-center gap-2">
+    <button
+      class="btn btn-outline-secondary btn-xs"
+      type="button"
+      placement="left"
+      [ngbTooltip]="'betshopManagement.betshops.view'"
+      (click)="openModal(BUTTON_ACTIONS.VIEW, row)"
+    >
+      <i class="fa fa-eye"></i>
+    </button>
+
+    <button
+      class="btn btn-outline-secondary btn-xs"
+      type="button"
+      placement="left"
+      [ngbTooltip]="'betshopManagement.betshops.edit'"
+      (click)="openModal(BUTTON_ACTIONS.EDIT, row)"
+    >
+      <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+</ng-template> -->
