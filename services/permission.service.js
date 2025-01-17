@@ -13,6 +13,24 @@ module.exports = class PermissionService extends BaseService {
         _permission = Permission;
         _permissionType = PermissionType;
     }
+    // getAllPermissions = catchServiceAsync(async (filter) => {
+    //     const permissions = await _permission
+    //         .find(filter)
+    //         .populate("userId", "firstName lastName")
+    //         .populate("permissionTypeId", "name")
+    //         .exec();
+
+    //     const totalCount = await _permission.countDocuments(filter);
+
+    //     return {
+    //         data: {
+    //             result: permissions,
+    //             totalCount,
+    //         }
+
+    //     };
+    // });
+
     getAllPermissions = catchServiceAsync(async (filter) => {
         const permissions = await _permission
             .find(filter)
@@ -22,12 +40,24 @@ module.exports = class PermissionService extends BaseService {
 
         const totalCount = await _permission.countDocuments(filter);
 
+        // Procesar cada permiso y agregar datos del archivo adjunto
+        const processedPermissions = permissions.map((permission) => {
+            const attachment = permission.attachment
+                ? {
+                    content: permission.attachment.data.toString("base64"), // Convertir binario a base64
+                    contentType: permission.attachment.contentType,
+                    originalName: permission.attachment.originalName,
+                }
+                : null;
+
+            return { ...permission.toObject(), attachment };
+        });
+
         return {
             data: {
-                result: permissions,
+                result: processedPermissions,
                 totalCount,
-            }
-
+            },
         };
     });
 
@@ -83,7 +113,7 @@ module.exports = class PermissionService extends BaseService {
 
 
     createWithType = catchServiceAsync(async (permissionData) => {
-        const { permissionTypeId, userId } = permissionData;
+        const { permissionTypeId, userId, attachment } = permissionData;
 
         if (!userId) {
             throw new AppError("El campo userId es obligatorio", 400);
@@ -94,10 +124,22 @@ module.exports = class PermissionService extends BaseService {
             throw new AppError("Tipo de permiso no encontrado", 404);
         }
 
-        const newPermission = await _permission.create(permissionData);
+        const attachmentData = attachment
+            ? {
+                data: attachment.content,
+                contentType: attachment.contentType,
+                originalName: attachment.originalName,
+            }
+            : null;
+
+        const newPermission = await _permission.create({
+            ...permissionData,
+            attachment: attachmentData,
+        });
 
         return { data: newPermission };
     });
+
 
     approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
         const updatedPermission = await _permission.findOneAndUpdate(

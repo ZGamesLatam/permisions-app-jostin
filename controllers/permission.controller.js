@@ -2,6 +2,7 @@ const BaseController = require("./base.controller");
 const catchControllerAsync = require("../utils/catch-controller-async");
 const { appResponse } = require("../utils/app-response");
 let _permissionService = null;
+const fs = require('fs');
 
 module.exports = class PermissionController extends BaseController {
     constructor({ PermissionService }) {
@@ -23,9 +24,28 @@ module.exports = class PermissionController extends BaseController {
     });
     createWithType = catchControllerAsync(async (req, res) => {
         const { body } = req;
-        const newPermission = await _permissionService.createWithType(body);
+
+        const attachment = req.file
+            ? {
+                content: fs.readFileSync(req.file.path), // Lee el archivo como un Buffer
+                contentType: req.file.mimetype,
+                originalName: req.file.originalname,
+            }
+            : null;
+
+        const newPermission = await _permissionService.createWithType({
+            ...body,
+            attachment,
+        });
+
         return appResponse(res, newPermission);
     });
+
+    // createWithType = catchControllerAsync(async (req, res) => {
+    //     const { body } = req;
+    //     const newPermission = await _permissionService.createWithType(body);
+    //     return appResponse(res, newPermission);
+    // });
     approve = catchControllerAsync(async (req, res) => {
         const { id } = req.params;
         const { userAdminId } = req.body;
