@@ -3,14 +3,14 @@ const { Router } = require("express");
 
 module.exports = function ({ PermissionTypeController }) {
     const router = Router();
-    router.get("/", PermissionTypeController.getAll);
-    router.get("/:id", PermissionTypeController.getOne);
+    router.get("/get-permissions-type", PermissionTypeController.getAllPermissionTypes);
+    router.get("/get-permission-type/:id", PermissionTypeController.getOne);
 
-    router.post("/", PermissionTypeController.createPermissionType);
+    router.post("/create-permission-type", PermissionTypeController.createPermissionType);
 
-    router.put("/:id", PermissionTypeController.update);
+    router.put("/update-permission-type/:id", PermissionTypeController.update);
 
-    router.delete("/:id", PermissionTypeController.delete);
+    router.delete("/delete-permission-type/:id", PermissionTypeController.delete);
 
     return router;
 };

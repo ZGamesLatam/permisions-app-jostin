@@ -12,7 +12,6 @@ module.exports = class Database {
       .connect(_mongoURI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        readPreference: "secondaryPreferred",
       })
       .then(() => _server.start())
       .catch(console.log);

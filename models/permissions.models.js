@@ -25,9 +25,10 @@ const PermissionSchema = new Schema(
             type: String,
             required: true
         },
-        attachments: {
-            type: [String],
-            default: []
+        attachment: {
+            data: Buffer, // Campo para almacenar el contenido del archivo
+            contentType: String, // Tipo MIME del archivo
+            originalName: String, // Nombre original del archivo
         },
         status: {
             type: String,

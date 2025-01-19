@@ -16,9 +16,9 @@ const UserSchema = new Schema(
             required: true,
         },
         role: {
-            type: String,
-            enum: ["employee", "admin"],
-            default: "employee",
+            type: Schema.Types.ObjectId,
+            ref: "Role",
+            required: true,
         },
     },
     {

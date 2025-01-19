@@ -8,9 +8,15 @@ module.exports = class PermissionTypeService extends BaseService {
         super(PermissionType);
         _permissionType = PermissionType;
     }
+
+    getAllPermissionTypes = catchServiceAsync(async () => {
+        const permissionTypes = await _permissionType.find({});
+        return { data: permissionTypes };
+    });
+
     createPermissionType = catchServiceAsync(async (data) => {
         const newPermissionType = await _permissionType.create(data);
         return { data: newPermissionType };
-
     });
+
 };
