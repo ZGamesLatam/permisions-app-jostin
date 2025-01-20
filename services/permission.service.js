@@ -13,55 +13,8 @@ module.exports = class PermissionService extends BaseService {
         _permission = Permission;
         _permissionType = PermissionType;
     }
-    // getAllPermissions = catchServiceAsync(async (filter) => {
-    //     const permissions = await _permission
-    //         .find(filter)
-    //         .populate("userId", "firstName lastName")
-    //         .populate("permissionTypeId", "name")
-    //         .exec();
 
-    //     const totalCount = await _permission.countDocuments(filter);
-
-    //     return {
-    //         data: {
-    //             result: permissions,
-    //             totalCount,
-    //         }
-
-    //     };
-    // });
-
-    getAllPermissions = catchServiceAsync(async (filter) => {
-        const permissions = await _permission
-            .find(filter)
-            .populate("userId", "firstName lastName")
-            .populate("permissionTypeId", "name")
-            .exec();
-
-        const totalCount = await _permission.countDocuments(filter);
-
-        // Procesar cada permiso y agregar datos del archivo adjunto
-        const processedPermissions = permissions.map((permission) => {
-            const attachment = permission.attachment
-                ? {
-                    content: permission.attachment.data.toString("base64"), // Convertir binario a base64
-                    contentType: permission.attachment.contentType,
-                    originalName: permission.attachment.originalName,
-                }
-                : null;
-
-            return { ...permission.toObject(), attachment };
-        });
-
-        return {
-            data: {
-                result: processedPermissions,
-                totalCount,
-            },
-        };
-    });
-
-    findAllPermissions = catchServiceAsync(async (filters) => {
+    findAllPermissions = catchServiceAsync(async (filters, user) => {
         const { status, permissionTypeId, userName, limit = 10, page = 1 } = filters;
 
         const query = {
@@ -69,7 +22,11 @@ module.exports = class PermissionService extends BaseService {
             ...(permissionTypeId && { permissionTypeId }),
         };
 
-        if (userName) {
+        if (user.role.name === "employee") {
+            query.userId = user._id;
+        }
+
+        if (userName && user.role.name !== "employee") {
             const users = await _permission
                 .find()
                 .populate({
@@ -91,7 +48,6 @@ module.exports = class PermissionService extends BaseService {
             if (userIds.length > 0) {
                 query.userId = { $in: userIds };
             } else {
-
                 return { data: { result: [], totalCount: 0 } };
             }
         }
@@ -109,8 +65,6 @@ module.exports = class PermissionService extends BaseService {
 
         return { data: { result, totalCount } };
     });
-
-
 
     createWithType = catchServiceAsync(async (permissionData) => {
         const { permissionTypeId, userId, attachment } = permissionData;
@@ -139,7 +93,6 @@ module.exports = class PermissionService extends BaseService {
 
         return { data: newPermission };
     });
-
 
     approvePermission = catchServiceAsync(async (permissionId, userAdminId) => {
         const updatedPermission = await _permission.findOneAndUpdate(

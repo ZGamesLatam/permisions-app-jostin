@@ -7,9 +7,9 @@ const upload = require('../../middleware/uploadMiddleware');
 module.exports = function ({ PermissionController, AuthMiddleware, User, }) {
     const router = Router();
 
-    router.get("/get-all-permission", PermissionController.getAllPermissions);
+    router.get("/get-all-permissions", PermissionController.getAllPermissions);
     router.get("/get-one-permission/:id", PermissionController.getOne);
-    router.get("/filter-permissions", PermissionController.findAllPermissions);
+    router.get("/filter-permissions", [AuthMiddleware], PermissionController.findAllPermissions);
 
     router.post("/create-permission-type", upload.single('attachment'), PermissionController.createWithType);
     router.post("/create-permission", PermissionController.create);

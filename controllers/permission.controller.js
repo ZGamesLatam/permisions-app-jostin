@@ -10,16 +10,13 @@ module.exports = class PermissionController extends BaseController {
         _permissionService = PermissionService;
     }
     findAllPermissions = catchControllerAsync(async (req, res) => {
-        const result = await _permissionService.findAllPermissions({
-            ...req.query,
-        });
+        const filters = req.query;
+        const result = await _permissionService.findAllPermissions(filters, req.user);
         return appResponse(res, result);
     });
-
-
     getAllPermissions = catchControllerAsync(async (req, res) => {
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
-        const permissions = await _permissionService.getAllPermissions(filter);
+        const permissions = await _permissionService.getAllPermissions(filter, req.user);
         return appResponse(res, permissions);
     });
     createWithType = catchControllerAsync(async (req, res) => {
@@ -40,12 +37,6 @@ module.exports = class PermissionController extends BaseController {
 
         return appResponse(res, newPermission);
     });
-
-    // createWithType = catchControllerAsync(async (req, res) => {
-    //     const { body } = req;
-    //     const newPermission = await _permissionService.createWithType(body);
-    //     return appResponse(res, newPermission);
-    // });
     approve = catchControllerAsync(async (req, res) => {
         const { id } = req.params;
         const { userAdminId } = req.body;
