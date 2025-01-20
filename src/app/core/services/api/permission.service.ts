@@ -21,24 +21,41 @@ export class PermissionService {
     private _notificationService: ToastrNotificationService
   ) {}
 
-  getPermissions(filter: object = {}): Observable<ApiResponse<ApiData<any[]>>> {
-    const endpoint = `${this.apiUrl}/get-all-permission`;
-    const params = new HttpParams({ fromObject: { ...filter } });
-    return this._httpClient
-      .get<ApiResponse<ApiData<any[]>>>(endpoint, {
-        params,
-      })
-      .pipe(
-        tap((response) => {
-          console.log('Respuesta del backend:', response);
-        })
-      );
-  }
+  // getPermissions(filter: object = {}): Observable<ApiResponse<ApiData<any[]>>> {
+  //   const endpoint = `${this.apiUrl}/get-all-permission`;
+  //   const params = new HttpParams({ fromObject: { ...filter } });
+  //   return this._httpClient
+  //     .get<ApiResponse<ApiData<any[]>>>(endpoint, {
+  //       params,
+  //     })
+  //     .pipe(
+  //       tap((response) => {
+  //         console.log('Respuesta del backend:', response);
+  //       })
+  //     );
+  // }
 
-  getFilteredPermissions(filters: object = {}): Observable<any> {
-    const params = new HttpParams({ fromObject: { ...filters } });
-    return this._httpClient.get(`${this.apiUrl}/filter-permissions`, {
+  // getFilteredPermissions(filters: object = {}): Observable<any> {
+  //   const params = new HttpParams({ fromObject: { ...filters } });
+  //   return this._httpClient.get(`${this.apiUrl}/filter-permissions`, {
+  //     params,
+  //   });
+  // }
+
+  getFilteredPermissions(
+    filter: object = {}
+  ): Observable<ApiResponse<ApiData<any[]>>> {
+    const endpoint = `${this.apiUrl}/filter-permissions`;
+    const params = new HttpParams({ fromObject: { ...filter } });
+
+    // Asegúrate de incluir el token en los encabezados
+    const headers = new HttpHeaders({
+      'x-api-key': localStorage.getItem('auth-token') || '',
+    });
+
+    return this._httpClient.get<ApiResponse<ApiData<any[]>>>(endpoint, {
       params,
+      headers,
     });
   }
 
